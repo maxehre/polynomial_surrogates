@@ -7,7 +7,7 @@ import example_applications as examples
 
 # pick example ('beam'/'truss')
 
-example = 'truss'
+example = 'beam'
 
 # ---------------------------------------------------------------------------
 # input parameters
@@ -77,7 +77,7 @@ if np.size(np.shape(Y))==1:
     Y = np.expand_dims(Y, axis=1)
 
 # build surrogates
-#fpce     = MM.build_fpce(V, Y, ppce)
+# fpce,_   = MM.build_fpce(V, Y, ppce)
 fpce     = MM.build_spce(V, Y, Q, ppce, q)
 flra,_,_ = MM.build_cp(V, Y, R, plra)
 
@@ -103,13 +103,10 @@ y    = np.linspace(min(np.abs(Ye)),max(np.abs(Ye)),100)
 
 
 matplotlib.rcParams.update({'font.size': 18,'legend.fontsize': 18})
-matplotlib.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
-#plt.rc('text', usetex=True)
-
 plt.semilogy(y, de(y),'-k',y, dpce(y),'or',y, dlra(y),'xg')
 plt.ylim(1e-2, 1e3)
 plt.title('$Densities$')
 plt.xlabel('$u_{out}$')
-plt.ylabel('$f_{u_{out}}$')
+plt.ylabel('$\pi_{u_{out}}$')
 plt.legend(['DMC','PCE','LRA'])
 plt.tight_layout()
