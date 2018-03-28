@@ -4,10 +4,6 @@ import sympy as sym
 from sklearn import linear_model as sklm
 from sympy.utilities.lambdify import lambdify
 import itertools as itt
-<<<<<<< HEAD
-=======
-import pdb
->>>>>>> a62e4489bba6d36502bbe86eec6d8800c23789f7
 
 
 # ---------------------------------------------------------------------------

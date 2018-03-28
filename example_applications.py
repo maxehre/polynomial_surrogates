@@ -25,7 +25,7 @@ mulnX_beam  = np.log(muX_beam) - .5*stdlnX_beam**2
 
                     
 # ---------------------------------------------------------------------------                    
-# Transformation: Standard-Normal v <=> Original Space x
+# tandard-normal space v <=> original space x
 # ---------------------------------------------------------------------------
 
 def X2V_beam(x):

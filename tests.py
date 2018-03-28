@@ -1,4 +1,3 @@
-# LSF
 import numpy as np
 import scipy.stats as ss
 import surrogates_lib as MM
@@ -8,7 +7,7 @@ import example_applications as examples
 
 # pick example ('beam'/'truss')
 
-example = 'beam'
+example = 'truss'
 
 # ---------------------------------------------------------------------------
 # input parameters
@@ -16,7 +15,7 @@ example = 'beam'
 
 # global parameters
 ned = 50     # # of points in design of experiments
-nmc = 2.5e5  # # of points in MC reference
+nmc = int(2.5e5)  # # of points in MC reference
 # parameters for PCE
 ppce = 3      # max. polynomial order
 q    = .4     # truncation exponent
@@ -33,7 +32,7 @@ Ye   = data['Ye']
 d    = data['d']
 
 # ---------------------------------------------------------------------------
-# Trafos: Standard-Normal < -> Uniform Space
+# standard-normal v < -> uniform space u
 # ---------------------------------------------------------------------------
 
 def V2U(v):
@@ -47,7 +46,11 @@ def X2V(x):
         return examples.X2V_truss(x)
     elif example == 'beam':
         return examples.X2V_beam(x)
-   
+ 
+# ---------------------------------------------------------------------------
+# standard-normal space v < -> original space x
+# ---------------------------------------------------------------------------
+
 def V2X(v):
     if example == 'truss':
         return examples.V2X_truss(v)
