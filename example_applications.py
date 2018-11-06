@@ -23,9 +23,22 @@ stdX_beam = np.array([2e3, .05, .45e10, .0075, .015])
 stdlnX_beam = np.sqrt(np.log(stdX_beam**2./muX_beam**2 +1))
 mulnX_beam  = np.log(muX_beam) - .5*stdlnX_beam**2
 
-                    
+  
 # ---------------------------------------------------------------------------                    
-# tandard-normal space v <=> original space x
+# Ishigami function and related RV transformations
+# ---------------------------------------------------------------------------
+
+def X2V_ishigami(x):
+    return ss.norm.ppf((x+np.pi)/(2*np.pi), loc=0, scale=1)
+
+def V2X_ishigami(v):
+    return np.pi*(2*ss.norm.cdf(v, loc=0, scale=1) - 1)
+
+def ishigami(x):
+    return   np.sin(x[0]) + 7*(np.sin(x[1]))**2 + 0.1*x[2]**4*np.sin(x[0])
+
+# ---------------------------------------------------------------------------                    
+# standard-normal space v <=> original space x
 # ---------------------------------------------------------------------------
 
 def X2V_beam(x):
