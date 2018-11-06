@@ -15,15 +15,17 @@ Polynomial meta-models with canonical low-rank approximations:
 Numerical insights and comparison to sparse polynomial chaos expansions. 
 Journal of Computational Physics 321, 1144 - 1169.
 
-Moreover, an implementation of variance-based sensitivity analysis tools based on the model coefficients should follow which is according to
+Includes Variance-based sensitivity analysis for
+
+- full and sparse PCE-based  according to
 
 Sudret, B. (2008). 
 Global sensitivity analysis using polynomial chaos expansions.
 Reliability Engineering And System Safety 93(7), 964 - 979.
 
-and
+- (not yet) LRA-based variance-based sensitivity indices according to
 
-Konakli, K. and B. Sudret (2016a). Global sensitivity analysis using low-rank tensor approximations.
+Konakli, K. and B. Sudret (2016). Global sensitivity analysis using low-rank tensor approximations.
 Reliability Engineering & System Safety 156 (Supplement C), 64 - 83.
 
 
