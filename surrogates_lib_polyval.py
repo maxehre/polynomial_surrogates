@@ -2,7 +2,7 @@ import numpy as np
 import scipy.special as sss
 from sklearn import linear_model as sklm
 import itertools as itt
-
+import pdb
 # ---------------------------------------------------------------------------
 # Get index set of d-dimensional,tensorized polynomials of max. total order p
 # according to fractional q-norm
@@ -61,11 +61,11 @@ def build_fpce(X, Y, Q_target, p):
     
     for rowY in Y.T:
         
-        spce = fpce_main(X, rowY.T, Q_target, p)
+        spce,coeffs,alpha = fpce_main(X, rowY.T, Q_target, p)
                 
         spce_vec.append(spce)
             
-    return spce_vec
+    return spce_vec,coeffs,alpha
 
 # ---------------------------------------------------------------------------
 # driver for sparse polynomial chaos expansions
@@ -80,11 +80,11 @@ def build_spce(X, Y, Q_target, p, q):
     
     for rowY in Y.T:
         
-        spce = spce_main(X, rowY.T, Q_target, p, q)
+        spce,coeffs,alpha = spce_main(X, rowY.T, Q_target, p, q)
                 
         spce_vec.append(spce)
             
-    return spce_vec
+    return spce_vec,coeffs,alpha
 
 
 # ---------------------------------------------------------------------------
@@ -192,7 +192,7 @@ def fpce_main(X, Y, Q_target, pmax):
         
         return out
                
-    return fpce
+    return fpce,a,alpha_opt
 
 
 # ---------------------------------------------------------------------------
@@ -297,7 +297,7 @@ def spce_main(X, Y, Q_target, pmax, q):
         
         return out
                
-    return spce
+    return spce,a,alpha_opt[A_opt,:]
 
 # ---------------------------------------------------------------------------
 # main: construct CP with Hermitian polyonmial base and ALS
@@ -527,12 +527,32 @@ def pce_sensitivities(alpha,coeffs):
     # truncate 0-order index (output sample mean -> contributes no variance)
     coeffs = coeffs[1:]
     alpha = alpha[1:,:]
-    indicator_set = alpha[:,:] != 0
-
-    unique, unique_indices, inverse_indices = np.unique(indicator_set, axis=0, return_index=True, return_inverse=True)
-
+    indicator_set = (alpha[:,:] != 0).astype(int)
     total_variance = np.sum(coeffs ** 2)
-    V = np.bincount(unique_indices[inverse_indices], weights=coeffs**2)/total_variance
-    S = np.dot(coeffs ** 2 , indicator_set)/total_variance
-    # total Sobol indices
-    return (V,S)
+
+    id_var=list(range(1,d+1))
+    
+    # first-order total-effect indices
+    S = (np.dot(indicator_set.T,coeffs ** 2)/total_variance).flatten().tolist()
+    Sout = [id_var,S]
+    
+    # first-order Sobol indices
+    id_1 = np.where(np.sum(indicator_set,axis=1)==1)
+    coeffs = coeffs[id_1]
+    indicator_set = indicator_set[id_1]
+    V = (np.dot(indicator_set.T,coeffs ** 2)/total_variance).flatten().tolist()
+    Vout = [id_var,V]
+
+    #unique, unique_indices, inverse_indices = np.unique(indicator_set, axis=0, return_index=True, return_inverse=True)
+
+    # Sobol indices    
+    #id_V=np.array([np.where(indicator_set[unique_indices[i],:]==1) for i in range(len(unique_indices))])+1
+    #V = np.bincount(unique_indices[inverse_indices], weights=coeffs.flatten()**2)/total_variance
+    #V = V[V>0]
+    #Vout = np.concatenate(id_V, np.expand_dims(V, axis=1))
+ 
+
+    
+    
+    
+    return (Vout,Sout)
